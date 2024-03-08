@@ -48,39 +48,12 @@ install_pip() {
     fi
 }
 
-# Function to automate user input for package manager installations
-install_with_confirmation() {
-    package_manager=$1
-    package=$2
-    case $package_manager in
-        "apt-get")
-            sudo apt-get install -y $package
-            ;;
-        "npm")
-            npm install -g $package
-            ;;
-        "cargo")
-            cargo install $package
-            ;;
-        "pip")
-            pip install $package
-            ;;
-    esac
-    if [ $? -eq 0 ]; then
-        echo "$package installed successfully."
-    else
-        echo "Failed to install $package with $package_manager."
-        failed_packages+=("$package")
-    fi
-}
-
-# Install nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-source ~/.bashrc
-
-# Install Rust without interaction
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-source ~/.cargo/env
+# Initialize arrays to categorize packages
+npm_packages=()
+apt_packages=()
+cargo_packages=()
+pip_packages=()
+failed_packages=()
 
 # List of packages to install
 packages_to_install=(
@@ -135,10 +108,51 @@ packages_to_install=(
     "kibana"
 )
 
-# Main script
-failed_packages=()
+# Iterate through packages to categorize them and handle updates
 for package in "${packages_to_install[@]}"; do
-    install_with_confirmation "apt-get" "$package" || install_with_confirmation "npm" "$package" || install_with_confirmation "cargo" "$package" || install_with_confirmation "pip" "$package"
+    # Check if package is available through npm
+    if npm_package_exists "$package"; then
+        npm_packages+=("$package")
+        continue
+    fi
+
+    # Check if package is available through apt-get
+    if apt_package_exists "$package"; then
+        apt_packages+=("$package")
+        continue
+    fi
+
+    # Check if package is available through cargo
+    if cargo_package_exists "$package"; then
+        cargo_packages+=("$package")
+        continue
+    fi
+
+    # Check if package is available through pip
+    if pip_package_exists "$package"; then
+        pip_packages+=("$package")
+        continue
+    fi
+
+    # If package not found in any package manager, add to failed_packages
+    failed_packages+=("$package")
+done
+
+# Install packages using corresponding package managers
+for package in "${npm_packages[@]}"; do
+    install_npm "$package"
+done
+
+for package in "${apt_packages[@]}"; do
+    install_apt "$package"
+done
+
+for package in "${cargo_packages[@]}"; do
+    install_cargo "$package"
+done
+
+for package in "${pip_packages[@]}"; do
+    install_pip "$package"
 done
 
 # Print failed packages if any
@@ -146,7 +160,3 @@ if [ ${#failed_packages[@]} -gt 0 ]; then
     echo "The following packages failed to install:"
     printf '%s\n' "${failed_packages[@]}"
 fi
-
-# Source .bashrc and .cargo/env to reflect changes
-source ~/.bashrc
-source ~/.cargo/env
