@@ -1,14 +1,13 @@
 # Awesome Developer Toolkit Installer
 
-Welcome to the Awesome Developer Toolkit Installer! This script automates the installation of essential developer tools and packages on Debian-based systems. It handles the installation of various programming languages, development frameworks, and tools using different package managers, ensuring a hassle-free setup for developers.
+Welcome to the Awesome Developer Toolkit Installer! This script automates the installation of essential developer tools and packages on Debian-based systems. It categorizes packages based on their corresponding package managers and handles updates or slight variations in package names to ensure a smooth installation experience for developers.
 
 ## Features
 
-- Installs essential developer tools and packages with ease.
-- Handles installation failures gracefully, providing a list of failed packages.
-- Supports multiple package managers including npm, apt-get, cargo, and pip.
-- Automatically installs nvm for managing Node.js versions.
-- Provides options to install Rust, Python3, pip, latest Node.js, pnpm, and yarn.
+- Automates the installation of essential developer tools and packages.
+- Categorizes packages based on their availability in different package managers (npm, apt-get, cargo, pip).
+- Handles updates or slight variations in package names to ensure consistency.
+- Supports multiple package managers, ensuring maximum compatibility.
 
 ## Usage
 
