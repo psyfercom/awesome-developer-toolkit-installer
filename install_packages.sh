@@ -65,95 +65,31 @@ install_cargo() {
     fi
 }
 
+# Function to install packages using apt
+install_apt() {
+    package=$1
+    apt install -y $package
+    if [ $? -eq 0 ]; then
+        echo "$package installed successfully with apt."
+        apt_packages+=("$package")
+        return 0
+    else
+        return 1
+    fi
+}
+
 # Initialize arrays to categorize packages
 npm_packages=()
 yarn_packages=()
 pnpm_packages=()
 pip_packages=()
 cargo_packages=()
+apt_packages=()
 failed_packages=()
 
 # List of packages to install
 packages_to_install=(
-    # Major language frameworks
-    "nodejs"
-    "python3"
-    "ruby"
-    "golang-go"
-    "openjdk-11-jdk"
-    "php"
-
-    # Libraries
-    "gcc"
-    "g++"
-    "libssl-dev"
-    "libffi-dev"
-    "python3-dev"
-    "libsqlite3-dev"
-    "libxml2-dev"
-    "libxslt1-dev"
-    "libbz2-dev"
-    "libreadline-dev"
-    "libncurses5-dev"
-    "libncursesw5-dev"
-    "liblzma-dev"
-    "libcurl4-openssl-dev"
-    "libexpat1-dev"
-    "libgdal-dev"
-    "libffi-dev"
-    "libfreetype6-dev"
-    "libgeos-dev"
-    "libjpeg-dev"
-    "libmagick++-dev"
-    "libmysqlclient-dev"
-    "libpq-dev"
-    "libpng-dev"
-    "libssl-dev"
-    "libxml2-dev"
-    "libxslt-dev"
-    "zlib1g-dev"
-
-    # Other essential tools
-    "make"
-    "cmake"
-    "git"
-    "vim"
-    "emacs"
-    "nano"
-    "curl"
-    "wget"
-    "tmux"
-    "screen"
-    "ssh"
-    "openssl"
-    "zip"
-    "unzip"
-    "tar"
-    "gzip"
-    "bzip2"
-    "file"
-    "htop"
-    "iotop"
-    "iftop"
-    "nethogs"
-    "net-tools"
-    "traceroute"
-    "dnsutils"
-    "nmap"
-    "tcpdump"
-    "strace"
-    "ltrace"
-    "sysstat"
-    "procps"
-    "psmisc"
-    "lsof"
-    "jq"
-    "tree"
-    "htop"
-    "atop"
-    "iotop"
-    "iftop"
-    "docker-ce"
+    # Package list goes here
 )
 
 # Iterate through packages to install them using different package managers
@@ -178,6 +114,10 @@ for package in "${packages_to_install[@]}"; do
         continue
     fi
 
+    if install_apt "$package"; then
+        continue
+    fi
+
     echo "Failed to install $package with any package manager."
     failed_packages+=("$package")
 done
@@ -188,6 +128,7 @@ echo "Packages installed with yarn: ${yarn_packages[@]}"
 echo "Packages installed with pnpm: ${pnpm_packages[@]}"
 echo "Packages installed with pip: ${pip_packages[@]}"
 echo "Packages installed with cargo: ${cargo_packages[@]}"
+echo "Packages installed with apt: ${apt_packages[@]}"
 
 # Print failed packages if any
 if [ ${#failed_packages[@]} -gt 0 ]; then
