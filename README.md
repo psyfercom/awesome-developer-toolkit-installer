@@ -1,35 +1,35 @@
 # Awesome Developer Toolkit Installer
 
-Welcome to the Awesome Developer Toolkit Installer! This script automates the installation of essential developer tools and packages on Debian-based systems. It categorizes packages based on their corresponding package managers and handles updates or slight variations in package names to ensure a smooth installation experience for developers.
+Welcome to the Awesome Developer Toolkit Installer! This script automates the installation of essential developer tools and packages on Debian-based systems.
 
 ## Features
 
 - Automates the installation of essential developer tools and packages.
-- Categorizes packages based on their availability in different package managers (npm, apt-get, cargo, pip).
-- Handles updates or slight variations in package names to ensure consistency.
+- Categorizes packages based on their availability in different package managers.
+- Handles updates or slight variations in package names to ensure a smooth installation experience for developers.
 - Supports multiple package managers, ensuring maximum compatibility.
 
 ## Usage
 
-1. Clone the repository:
+1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/yourusername/awesome-developer-toolkit-installer.git
+   git clone https://github.com/psyferlab/awesome-developer-toolkit-installer.git
    ```
 
-2. Change directory to the cloned repository:
+2. **Change directory to the cloned repository**:
 
    ```bash
    cd awesome-developer-toolkit-installer
    ```
 
-3. Make the script executable:
+3. **Make the script executable**:
 
    ```bash
    chmod +x install_packages.sh
    ```
 
-4. Execute the script:
+4. **Execute the script**:
 
    ```bash
    ./install_packages.sh
@@ -42,3 +42,9 @@ Contributions are welcome! If you have any suggestions, improvements, or new fea
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+[![GitHub stars](https://img.shields.io/github/stars/psyferlab/awesome-developer-toolkit-installer.svg?style=flat-square)](https://github.com/psyferlab/awesome-developer-toolkit-installer/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/psyferlab/awesome-developer-toolkit-installer.svg?style=flat-square)](https://github.com/psyferlab/awesome-developer-toolkit-installer/network)
+[![GitHub license](https://img.shields.io/github/license/psyferlab/awesome-developer-toolkit-installer.svg?style=flat-square)](https://github.com/psyferlab/awesome-developer-toolkit-installer/blob/main/LICENSE)
