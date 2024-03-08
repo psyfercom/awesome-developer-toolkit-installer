@@ -1,21 +1,5 @@
 #!/bin/bash
 
-# Install nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-
-# Install Rust (choose 1 for automatic install)
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
-# Install Python3 and pip
-sudo apt-get update
-sudo apt-get install -y python3 python3-pip
-
-# Install latest Node.js with nvm
-nvm install node
-
-# Install pnpm and yarn
-npm install -g pnpm yarn
-
 # Function to install packages using npm
 install_npm() {
     package=$1
@@ -64,10 +48,46 @@ install_pip() {
     fi
 }
 
+# Function to automate user input for package manager installations
+install_with_confirmation() {
+    package_manager=$1
+    package=$2
+    case $package_manager in
+        "apt-get")
+            sudo apt-get install -y $package
+            ;;
+        "npm")
+            npm install -g $package
+            ;;
+        "cargo")
+            cargo install $package
+            ;;
+        "pip")
+            pip install $package
+            ;;
+    esac
+    if [ $? -eq 0 ]; then
+        echo "$package installed successfully."
+    else
+        echo "Failed to install $package with $package_manager."
+        failed_packages+=("$package")
+    fi
+}
+
+# Install nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+source ~/.bashrc
+
+# Install Rust without interaction
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+source ~/.cargo/env
+
 # List of packages to install
 packages_to_install=(
     "code"
     "git"
+    "python3"
+    "nodejs"
     "docker"
     "default-jdk"
     "gcc"
@@ -89,6 +109,7 @@ packages_to_install=(
     "php"
     "ruby"
     "golang"
+    "rustc"
     "cmake"
     "make"
     "maven"
@@ -117,7 +138,7 @@ packages_to_install=(
 # Main script
 failed_packages=()
 for package in "${packages_to_install[@]}"; do
-    install_npm "$package" || install_apt "$package" || install_cargo "$package" || install_pip "$package"
+    install_with_confirmation "apt-get" "$package" || install_with_confirmation "npm" "$package" || install_with_confirmation "cargo" "$package" || install_with_confirmation "pip" "$package"
 done
 
 # Print failed packages if any
@@ -125,3 +146,7 @@ if [ ${#failed_packages[@]} -gt 0 ]; then
     echo "The following packages failed to install:"
     printf '%s\n' "${failed_packages[@]}"
 fi
+
+# Source .bashrc and .cargo/env to reflect changes
+source ~/.bashrc
+source ~/.cargo/env
