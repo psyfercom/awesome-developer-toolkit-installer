@@ -24,7 +24,7 @@ jobs:
       - name: List Files
         run: ls -al
 
-      - name: Debugging: Print Package.json
+      - name: Debugging
         run: cat package.json
 
       - name: Run Tests
